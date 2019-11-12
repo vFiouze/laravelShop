@@ -46,6 +46,8 @@ class LoginController extends Controller
         $user->update([
             'lastLogin' => Carbon::now()->toDateTimeString(),
         ]);
+
+        //fire new event at login to send email
         event(new CustomerLoginEvent($user));
 
     }
