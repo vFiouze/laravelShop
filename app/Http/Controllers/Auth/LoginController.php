@@ -48,7 +48,8 @@ class LoginController extends Controller
         ]);
 
         //fire new event at login to send email
-        event(new CustomerLoginEvent($user));
+        //delete event
+        //event(new CustomerLoginEvent($user));
 
     }
 }
