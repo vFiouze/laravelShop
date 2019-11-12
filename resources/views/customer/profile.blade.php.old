@@ -1,0 +1,89 @@
+@extends('layouts.app')
+
+@section('content')
+	<div class="container">
+		<h1>Profil of {{$user->name}}</h1>
+		<div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<h3>Address</h3>
+						</button>
+					</h2>
+				</div>
+				<div class="card-body">
+				@forelse ($customer->address as $element)
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+						
+							<div class="row">
+								<div class="col-9">
+									{{$element->address}} {{$element->zip}} {{$element->town}} {{$element->geodiv}} {{$element->country}}
+								</div>
+								<div class="col-1"><button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#editaddress{{$element->id}}" aria-expanded="false" aria-controls="colapseAddress">Edit<i class="fas fa-edit ml-2"></i></button>
+								</div>
+								<div class="col-1">
+									<form method="POST" action="{{ route('address.delete',$element->id) }}">
+		  								@method('DELETE')
+		  								@csrf
+		 								<input type="hidden" name="id" value="{{$element->id}}">
+										<button type="submit" class="btn btn-danger">Delete<i class="fas fa-trash-alt ml-2"></i></button>
+		  							</form>
+								</div>
+								
+							</div>
+							<div class="row mt-2">
+								<div class="col-12">
+									<div class="collapse-show" id="editaddress{{$element->id}}">
+		  								<div class="card card-body">
+		  									<form method="POST" action="{{ route('address.update',$element->id) }}">
+		  										@csrf
+		  										@method('PATCH')
+		  										@include('customer.addressForm')
+		  										<input type="hidden" name="id" value="{{$element->id}}">
+		  										<button type="submit" class="btn btn-success">Update<i class="fa fa-refresh ml-2" aria-hidden="true"></i></button>
+		  									</form>
+										</div>
+									</div>	
+								</div>
+							</div>
+						</div>
+					</div>
+			</div>
+				@empty
+				@if($errors->has('address'))
+					
+						{{$errors->first('address')}}
+				@endif
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+						<div class="card-body">
+							No address registered. Ceate a new one
+							<form method="POST" action={{ route('address.store') }}>
+								@csrf
+								@include('customer.addressForm')
+									
+								<button type = "submit" class="btn btn-success">Save<i class="ml-2 fas fa-save"></i></button>
+							</form>
+						</div>
+					</div>
+				@endforelse
+			</div>
+			<div class="card">
+			    <div class="card-header" id="headingThree">
+			      <h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<h3>Orders</h3>
+						</button>
+					</h2>
+			    </div>
+			    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+			      <div class="card-body">
+			        ontent 2
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	
+
+@endsection
